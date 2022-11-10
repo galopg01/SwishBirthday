@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 BirthContract.BirthEntry.COLUMN_NAME_HORA
         };
 
-        String sortOrder = /* BirthContract.BirthEntry.COLUMN_NAME_NOMBRE */ "TO_DATE("+ BirthContract.BirthEntry.COLUMN_NAME_FECHA + ", ' %MMM %dd ,%yyyy')" + " ASC";
+        String sortOrder =  BirthContract.BirthEntry.COLUMN_NAME_NOMBRE /*"TO_DATE("+ BirthContract.BirthEntry.COLUMN_NAME_FECHA + ", ' %MMM %dd ,%yyyy')"*/ + " ASC";
         Cursor cursor;
         if(name != null) {
             String where = BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " LIKE ?";
