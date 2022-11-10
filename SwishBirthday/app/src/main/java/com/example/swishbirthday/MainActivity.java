@@ -58,18 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Angelo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Apr 27, 2001");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-04-27");
         long id = db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Galo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Jan 10, 2001");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-01-10");
         values.put(BirthContract.BirthEntry.COLUMN_NAME_HORA, "23:55");
         id = db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Paula");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-12-13");
         id = db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 BirthContract.BirthEntry.COLUMN_NAME_HORA
         };
 
-        String sortOrder =  BirthContract.BirthEntry.COLUMN_NAME_NOMBRE /*"TO_DATE("+ BirthContract.BirthEntry.COLUMN_NAME_FECHA + ", ' %MMM %dd ,%yyyy')"*/ + " ASC";
+        String sortOrder = /*"DATE(" +new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ")-DATE("+ BirthContract.BirthEntry.COLUMN_NAME_FECHA+ ")"*/ BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " ASC";
         Cursor cursor;
         if(name != null) {
             String where = BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " LIKE ?";
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Date date=null;
                 try {
-                    date = new SimpleDateFormat("MMM dd, yyyy",new Locale("en","EN")).parse(fecha);
+                    date = new SimpleDateFormat("yyyy-MM-dd",new Locale("en","EN")).parse(fecha);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
