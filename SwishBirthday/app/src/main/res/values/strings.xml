@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">SwishBirthday</string>
     <string name="InputName">Input name</string>
+    <string name="Information">Information</string>
+    <string name="Name">Name:</string>
+    <string name="Date">Date:</string>
+    <string name="Hour">Hour:</string>
+    <string name="Turns">Turns</string>
+    <string name="Edit">EDIT</string>
+    <string name="Delete">DELETE</string>
 </resources>
