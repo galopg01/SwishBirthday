@@ -2,4 +2,11 @@
 <resources>
     <string name="app_name">SwishBirthday</string>
     <string name="InputName">Introduce un nombre</string>
+    <string name="Information">Información</string>
+    <string name="Name">Nombre:</string>
+    <string name="Date">Fecha:</string>
+    <string name="Hour">Hora:</string>
+    <string name="Turns">Cumple</string>
+    <string name="Edit">EDITAR</string>
+    <string name="Delete">ELIMINAR</string>
 </resources>

@@ -5,14 +5,24 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Birthday {
+    private int id;
     private String nombre;
     private Date fecha;
     private String hora;
 
-    public Birthday(String nombre, Date fecha, String hora) {
+    public Birthday(int id, String nombre, Date fecha, String hora) {
+        this.id = id;
         this.nombre = nombre;
         this.fecha = fecha;
         this.hora = hora;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private void setId() {
+        this.id = id;
     }
 
     public String getNombre() {
