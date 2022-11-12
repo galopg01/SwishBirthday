@@ -36,7 +36,7 @@ public class InfoActivity extends AppCompatActivity {
         textName.setText(birthday.getNombre());
 
         TextView textDate = findViewById(R.id.textDate);
-        textDate.setText(new SimpleDateFormat("MMM dd, yyy").format(birthday.getFecha()));
+        textDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(birthday.getFecha()));
 
         TextView textHour = findViewById(R.id.textHour);
         textHour.setText(birthday.getHora() == null ? "--:--" : birthday.getHora());
@@ -76,7 +76,7 @@ public class InfoActivity extends AppCompatActivity {
 
         Date date=null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd",new Locale("en","EN")).parse(fecha);
+            date = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(fecha);
 
         } catch (ParseException e) {
             e.printStackTrace();

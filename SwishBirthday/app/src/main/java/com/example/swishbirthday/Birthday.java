@@ -2,6 +2,7 @@ package com.example.swishbirthday;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Birthday {
@@ -51,6 +52,6 @@ public class Birthday {
 
     @Override
     public String toString() {
-        return  nombre + "\n" + new SimpleDateFormat("MMM dd, yyy").format(fecha) + "   " + (hora == null ? "           " : hora) + "                                       " + (TimeUnit.MILLISECONDS.toDays(new Date().getTime() - fecha.getTime())/365 +1);
+        return  nombre + "\n" + new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(fecha) + "   " + (hora == null ? "           " : hora) + "                                       " + (TimeUnit.MILLISECONDS.toDays(new Date().getTime() - fecha.getTime())/365 +1);
     }
 }

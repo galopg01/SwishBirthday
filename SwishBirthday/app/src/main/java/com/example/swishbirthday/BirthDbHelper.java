@@ -13,7 +13,8 @@ public class BirthDbHelper extends SQLiteOpenHelper {
                     BirthContract.BirthEntry._ID + " INTEGER PRIMARY KEY," +
                     BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " TEXT," +
                     BirthContract.BirthEntry.COLUMN_NAME_FECHA + " TEXT," +
-                    BirthContract.BirthEntry.COLUMN_NAME_HORA + " TEXT)";
+                    BirthContract.BirthEntry.COLUMN_NAME_HORA + " TEXT" +
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + BirthContract.BirthEntry.TABLE_NAME;
@@ -23,8 +24,8 @@ public class BirthDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
     }
 
     @Override

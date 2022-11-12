@@ -1,47 +1,62 @@
 package com.example.swishbirthday;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.ImageView;
 import android.text.format.DateFormat;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddBirthdayActivity extends AppCompatActivity {
 
+    private Toast toast;
+
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+    private ImageView clearTimeButton;
 
-    private EditText editTextAddDate, editTextAddTime;
+    private EditText editTextAddName, editTextAddDate, editTextAddTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_birthday);
 
+        toast = null;
+        editTextAddName = (EditText) findViewById(R.id.editTextAddName);
         editTextAddDate = (EditText) findViewById(R.id.editTextAddDate);
         editTextAddTime = (EditText) findViewById(R.id.editTextAddTime);
+        clearTimeButton = (ImageView) findViewById((R.id.buttonClearTime));
 
         initDatePicker();
         initTimePicker();
     }
 
     private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month += 1;
-                String selectedDate = day + " / " + month + " / " + year;
-                editTextAddDate.setText(selectedDate);
+        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, day) -> {
+            month += 1;
+            String dayPadding = day <= 9 ? "0" : "";
+            String monthPadding = month <= 9 ? "0" : "";
+            String selectedDate = dayPadding + day + "/" + monthPadding + month + "/" + year;
+
+            try {
+                Date date = DateFormat.getDateFormat(this).parse(selectedDate);
+                editTextAddDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         };
 
@@ -54,26 +69,66 @@ public class AddBirthdayActivity extends AppCompatActivity {
     }
 
     private void initTimePicker() {
-        TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                String selectedTime = hour + ":" + minute;
-                editTextAddTime.setText(selectedTime);
-            }
+        TimePickerDialog.OnTimeSetListener timeSetListener = (timePicker, hour, minute) -> {
+            String hourPadding = hour <= 9 ? "0" : "";
+            String minutePadding = minute <= 9 ? "0" : "";
+            String selectedTime = hourPadding + hour + ":" + minutePadding + minute;
+
+            editTextAddTime.setText(selectedTime);
+            clearTimeButton.setVisibility(View.VISIBLE);
         };
 
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        timePickerDialog = new TimePickerDialog(this, timeSetListener, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog = new TimePickerDialog(this, timeSetListener, hour,
+                minute, DateFormat.is24HourFormat(this));
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.editTextAddDate: datePickerDialog.show(); break;
             case R.id.editTextAddTime: timePickerDialog.show(); break;
+            case R.id.buttonClearTime: cleanTimeField(); break;
+            case R.id.buttonAddBirthday: addBirthday(); break;
         }
+    }
+
+    private void cleanTimeField() {
+        editTextAddTime.setText("");
+        clearTimeButton.setVisibility(View.GONE);
+    }
+
+    private void addBirthday() {
+        String name = editTextAddName.getText().toString();
+        if (name.isEmpty()) {
+            showToast(getResources().getString(R.string.empty_name));
+        } else {
+            String date = editTextAddDate.getText().toString();
+            if (date.isEmpty()) {
+                showToast(getResources().getString(R.string.empty_date));
+            } else {
+                String time = editTextAddTime.getText().toString();
+                BirthDbHelper dbHelper = new BirthDbHelper(this, "SwishBirthday.db");
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+
+                values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, name);
+                values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, date);
+                if (!time.isEmpty()) values.put(BirthContract.BirthEntry.COLUMN_NAME_HORA, time);
+                db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
+
+                showToast(getResources().getString(R.string.toast_add));
+                finish();
+            }
+        }
+    }
+
+    private void showToast(String text) {
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override

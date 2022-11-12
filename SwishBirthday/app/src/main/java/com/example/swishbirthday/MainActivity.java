@@ -80,23 +80,23 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Angelo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-04-27");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Apr 27, 2001");
         db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Galo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-01-10");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Jan 10, 2001");
         values.put(BirthContract.BirthEntry.COLUMN_NAME_HORA, "23:55");
         db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Paula");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2001-12-13");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
         db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Random");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "2010-12-13");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
         db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
 
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Date date=null;
                 try {
-                    date = new SimpleDateFormat("yyyy-MM-dd",new Locale("en","EN")).parse(fecha);
+                    date = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(fecha);
 
                 } catch (ParseException e) {
                     e.printStackTrace();

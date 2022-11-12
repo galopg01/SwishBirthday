@@ -10,10 +10,11 @@
         android:id="@+id/editTextAddTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:focusable="false"
-        android:hint="@string/Hour"
-        android:inputType="text"
+        android:hint="@string/editTextAddTime"
+        android:inputType="date"
         android:minHeight="48dp"
         android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/Name"
+        android:hint="@string/editTextAddName"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,16 +37,18 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.163" />
+        app:layout_constraintVertical_bias="0.163"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/editTextAddDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:focusable="false"
-        android:hint="@string/Date"
-        android:inputType="text"
+        android:hint="@string/editTextAddDate"
+        android:inputType="date"
         android:minHeight="48dp"
         android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,4 +57,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.259" />
+
+    <ImageView
+        android:id="@+id/buttonClearTime"
+        android:layout_width="17dp"
+        android:layout_height="21dp"
+        android:onClick="onClick"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextAddTime"
+        app:layout_constraintEnd_toEndOf="@+id/editTextAddTime"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toStartOf="@+id/editTextAddTime"
+        app:layout_constraintTop_toTopOf="@+id/editTextAddTime"
+        app:layout_constraintVertical_bias="0.481"
+        app:srcCompat="@drawable/cancel_multiplication_multiply_x_37917" />
+
+    <Button
+        android:id="@+id/buttonAddBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/buttonAddBirthday"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
