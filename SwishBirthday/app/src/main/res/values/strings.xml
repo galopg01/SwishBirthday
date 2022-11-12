@@ -8,4 +8,5 @@
     <string name="Turns">Turns</string>
     <string name="Edit">EDIT</string>
     <string name="Delete">DELETE</string>
+    <string name="AddBirthdayActivity">Add birthday</string>
 </resources>

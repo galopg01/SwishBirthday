@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
                 Birthday birthday = listaCumpleaños.get(position);
                 Intent intent = new Intent(MainActivity.this, InfoActivity.class);
                 intent.putExtra("birthday", birthday.getId());
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddBirthdayActivity.class);
                 startActivity(intent);
             }
         });

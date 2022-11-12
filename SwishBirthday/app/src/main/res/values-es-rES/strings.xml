@@ -9,4 +9,5 @@
     <string name="Turns">Cumple</string>
     <string name="Edit">EDITAR</string>
     <string name="Delete">ELIMINAR</string>
+    <string name="AddBirthdayActivity">Añadir cumpleaños</string>
 </resources>
