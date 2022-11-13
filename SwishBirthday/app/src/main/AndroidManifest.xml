@@ -14,30 +14,38 @@
         tools:targetApi="31">
         <activity
             android:name=".EditBirthdayActivity"
+            android:screenOrientation="portrait"
             android:label="@string/EditBirthdayActivity"
-            android:parentActivityName=".InfoActivity">
+            android:parentActivityName=".InfoActivity"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".InfoActivity" />
         </activity>
         <activity
             android:name=".AddBirthdayActivity"
+            android:screenOrientation="portrait"
             android:label="@string/AddBirthdayActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".InfoActivity"
-            android:parentActivityName=".MainActivity">
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

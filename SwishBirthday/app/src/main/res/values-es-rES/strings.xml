@@ -19,4 +19,5 @@
     <string name="editTextTime">Hora</string>
     <string name="EditBirthdayActivity">Editar cumpleaños</string>
     <string name="toast_edit">¡El cumpleaños se ha actualizado con éxito!</string>
+    <string name="toast_delete">¡El cumpleaños se ha eliminado con éxito!</string>
 </resources>

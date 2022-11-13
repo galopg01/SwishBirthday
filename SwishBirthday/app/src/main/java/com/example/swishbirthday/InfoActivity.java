@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 public class InfoActivity extends AppCompatActivity {
 
+    private Toast toast;
+
     Birthday birthday;
     BirthDbHelper dbHelper;
 
@@ -26,6 +29,7 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
+        toast = null;
         dbHelper = new BirthDbHelper(getApplicationContext(), "SwishBirthday.db");
 
         Intent intent= getIntent();
@@ -110,8 +114,15 @@ public class InfoActivity extends AppCompatActivity {
         String[] whereArgs = { String.valueOf(birthday.getId()) };
         db.delete(BirthContract.BirthEntry.TABLE_NAME, where, whereArgs);
 
+        showToast(getResources().getString(R.string.toast_delete));
         finish();
 
+    }
+
+    private void showToast(String text) {
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override

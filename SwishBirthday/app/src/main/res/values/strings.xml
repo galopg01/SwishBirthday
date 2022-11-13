@@ -18,4 +18,5 @@
     <string name="editTextTime">Time</string>
     <string name="EditBirthdayActivity">Edit birthday</string>
     <string name="toast_edit">Birthday updated successfully!</string>
+    <string name="toast_delete">Birthday deleted successfully!</string>
 </resources>

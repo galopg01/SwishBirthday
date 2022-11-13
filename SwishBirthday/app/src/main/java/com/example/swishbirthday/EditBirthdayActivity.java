@@ -104,6 +104,34 @@ public class EditBirthdayActivity extends AppCompatActivity {
                 minute, DateFormat.is24HourFormat(this));
     }
 
+    private void retrieveBirthdayAndFillFields() {
+        String[] columns = {
+                BirthContract.BirthEntry.COLUMN_NAME_NOMBRE,
+                BirthContract.BirthEntry.COLUMN_NAME_FECHA,
+                BirthContract.BirthEntry.COLUMN_NAME_HORA
+        };
+
+        String where = BirthContract.BirthEntry._ID + " = ?";
+        String[] whereArgs = { String.valueOf(birthdayId) };
+
+        Cursor cursor = db.query(BirthContract.BirthEntry.TABLE_NAME,
+                columns, where, whereArgs, null, null, null);
+        cursor.moveToFirst();
+
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
+        String date = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
+        String time = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_HORA));
+
+        cursor.close();
+
+        editTextEditName.setText(name);
+        editTextEditDate.setText(date);
+        if (time != null) {
+            editTextEditTime.setText(time);
+            clearTimeButton2.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.editTextEditDate: datePickerDialog.show(); break;
@@ -149,34 +177,6 @@ public class EditBirthdayActivity extends AppCompatActivity {
         if (toast != null) toast.cancel();
         toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
         toast.show();
-    }
-
-    private void retrieveBirthdayAndFillFields() {
-        String[] columns = {
-                BirthContract.BirthEntry.COLUMN_NAME_NOMBRE,
-                BirthContract.BirthEntry.COLUMN_NAME_FECHA,
-                BirthContract.BirthEntry.COLUMN_NAME_HORA
-        };
-
-        String where = BirthContract.BirthEntry._ID + " = ?";
-        String[] whereArgs = { String.valueOf(birthdayId) };
-
-        Cursor cursor = db.query(BirthContract.BirthEntry.TABLE_NAME,
-                columns, where, whereArgs, null, null, null);
-        cursor.moveToFirst();
-
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
-        String date = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
-        String time = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_HORA));
-
-        cursor.close();
-
-        editTextEditName.setText(name);
-        editTextEditDate.setText(date);
-        if (time != null) {
-            editTextEditTime.setText(time);
-            clearTimeButton2.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
