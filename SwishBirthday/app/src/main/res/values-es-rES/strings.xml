@@ -10,8 +10,8 @@
     <string name="buttonDeleteBirthday">Eliminar</string>
     <string name="AddBirthdayActivity">Añadir cumpleaños</string>
     <string name="buttonAddBirthday">Añadir</string>
-    <string name="empty_name">El campo nombre no puede estar vacío.</string>
-    <string name="empty_date">El campo fecha no puede estar vacío.</string>
+    <string name="empty_name">El campo Nombre no puede estar vacío</string>
+    <string name="empty_date">El campo Fecha no puede estar vacío</string>
     <string name="toast_add">¡El cumpleaños se ha añadido con éxito!</string>
     <string name="editTextName">Nombre</string>
     <string name="editTextDate">Fecha de nacimiento</string>
@@ -19,4 +19,5 @@
     <string name="EditBirthdayActivity">Editar cumpleaños</string>
     <string name="toast_edit">¡El cumpleaños se ha actualizado con éxito!</string>
     <string name="toast_delete">¡El cumpleaños se ha eliminado con éxito!</string>
+    <string name="toast_search">No se han encontrado cumpleaños</string>
 </resources>

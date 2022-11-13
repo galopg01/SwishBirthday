@@ -19,4 +19,5 @@
     <string name="EditBirthdayActivity">Edit birthday</string>
     <string name="toast_edit">Birthday updated successfully!</string>
     <string name="toast_delete">Birthday deleted successfully!</string>
+    <string name="toast_search">Birthdays not found</string>
 </resources>

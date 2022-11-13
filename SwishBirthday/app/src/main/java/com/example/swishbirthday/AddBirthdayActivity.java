@@ -60,7 +60,7 @@ public class AddBirthdayActivity extends AppCompatActivity {
 
             try {
                 Date date = DateFormat.getDateFormat(this).parse(selectedDate);
-                editTextAddDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(date));
+                editTextAddDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -115,6 +115,7 @@ public class AddBirthdayActivity extends AppCompatActivity {
             if (date.isEmpty()) {
                 showToast(getResources().getString(R.string.empty_date));
             } else {
+                date = convertDate(date);
                 String time = editTextAddTime.getText().toString();
                 BirthDbHelper dbHelper = new BirthDbHelper(this, "SwishBirthday.db");
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -129,6 +130,17 @@ public class AddBirthdayActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    private String convertDate(String date) {
+        Date dateReturned = null;
+        try {
+            dateReturned = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(dateReturned);
     }
 
     private void showToast(String text) {

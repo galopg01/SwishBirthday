@@ -52,6 +52,9 @@ public class Birthday {
 
     @Override
     public String toString() {
-        return  nombre + "\n" + new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(fecha) + "   " + (hora == null ? "           " : hora) + "                                       " + (TimeUnit.MILLISECONDS.toDays(new Date().getTime() - fecha.getTime())/365 +1);
+        return  nombre + "\n" + new SimpleDateFormat("MMM dd, yyyy",
+                Locale.getDefault()).format(fecha) + "   " + (hora == null ? "           " : hora) +
+                "                                       " +
+                (TimeUnit.MILLISECONDS.toDays(new Date().getTime() - fecha.getTime())/365 +1);
     }
 }

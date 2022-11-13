@@ -72,7 +72,7 @@ public class EditBirthdayActivity extends AppCompatActivity {
 
             try {
                 Date date = DateFormat.getDateFormat(this).parse(selectedDate);
-                editTextEditDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(date));
+                editTextEditDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -120,6 +120,7 @@ public class EditBirthdayActivity extends AppCompatActivity {
 
         String name = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
         String date = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
+        date = dateToLocal(date);
         String time = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_HORA));
 
         cursor.close();
@@ -130,6 +131,17 @@ public class EditBirthdayActivity extends AppCompatActivity {
             editTextEditTime.setText(time);
             clearTimeButton2.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String dateToLocal(String date) {
+        Date dateReturned = null;
+        try {
+            dateReturned = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(dateReturned);
     }
 
     public void onClick(View view) {
@@ -151,7 +163,7 @@ public class EditBirthdayActivity extends AppCompatActivity {
         if (name.isEmpty()) {
             showToast(getResources().getString(R.string.empty_name));
         } else {
-            String date = editTextEditDate.getText().toString();
+            String date = convertDate(editTextEditDate.getText().toString());
             String time = editTextEditTime.getText().toString();
             ContentValues values = new ContentValues();
 
@@ -171,6 +183,17 @@ public class EditBirthdayActivity extends AppCompatActivity {
             showToast(getResources().getString(R.string.toast_edit));
             finish();
         }
+    }
+
+    private String convertDate(String date) {
+        Date dateReturned = null;
+        try {
+            dateReturned = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(dateReturned);
     }
 
     private void showToast(String text) {

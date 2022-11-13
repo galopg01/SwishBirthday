@@ -22,47 +22,35 @@ public class InfoActivity extends AppCompatActivity {
     private Toast toast;
 
     private Birthday birthday;
-    private BirthDbHelper dbHelper;
-
     private TextView textName, textDate, textTime, textYears;
+
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+        initializeVariables();
+        setLabel();
+        mostrarCumpleaños();
+    }
 
+    private void initializeVariables() {
         toast = null;
-        dbHelper = new BirthDbHelper(getApplicationContext(), "SwishBirthday.db");
-
-        Intent intent= getIntent();
-        int id =  intent.getIntExtra("birthday", -1);
-        System.out.println(id);
-        birthday = obtenerCumpleaños(id);
-
-        if (Locale.getDefault().getLanguage().equals("es")) {
-            setTitle("Cumpleaños de " + birthday.getNombre());
-        } else {
-            setTitle(birthday.getNombre() + "’s birthday");
-        }
-
         textName = findViewById(R.id.textName);
         textDate = findViewById(R.id.textDate);
         textTime = findViewById(R.id.textTime);
         textYears = findViewById(R.id.textYears);
 
-        mostrarCumpleaños();
-    }
+        BirthDbHelper dbHelper = new BirthDbHelper(this, "SwishBirthday.db");
+        db = dbHelper.getWritableDatabase();
 
-    private void mostrarCumpleaños() {
-        textName.setText(birthday.getNombre());
-        textDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(birthday.getFecha()));
-        textTime.setText(birthday.getHora() == null ? "--:--" : birthday.getHora());
-        textYears.setText(String.valueOf(TimeUnit.MILLISECONDS.toDays((new Date().getTime() - birthday.getFecha().getTime())/365)+1));
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("birthday", -1);
+        birthday = obtenerCumpleaños(id);
     }
 
     private Birthday obtenerCumpleaños(int id) {
-        SQLiteDatabase db = this.dbHelper.getReadableDatabase();
-
         String[] columns = {
                 BirthContract.BirthEntry._ID,
                 BirthContract.BirthEntry.COLUMN_NAME_NOMBRE,
@@ -75,24 +63,16 @@ public class InfoActivity extends AppCompatActivity {
 
         Cursor cursor = db.query(
                 BirthContract.BirthEntry.TABLE_NAME,
-                columns,
-                where,
-                whereArgs,
-                null,
-                null,
-                null
-        );
-
+                columns, where, whereArgs, null, null, null);
         cursor.moveToFirst();
 
         int idb = cursor.getInt(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry._ID));
         String nombre = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
         String fecha = cursor.getString(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
 
-        Date date=null;
+        Date date = null;
         try {
             date = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(fecha);
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -102,7 +82,21 @@ public class InfoActivity extends AppCompatActivity {
         cursor.close();
 
         return new Birthday(idb, nombre, date, hora);
+    }
 
+    private void setLabel() {
+        if (Locale.getDefault().getLanguage().equals("es")) {
+            setTitle("Cumpleaños de " + birthday.getNombre());
+        } else {
+            setTitle(birthday.getNombre() + "’s birthday");
+        }
+    }
+
+    private void mostrarCumpleaños() {
+        textName.setText(birthday.getNombre());
+        textDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(birthday.getFecha()));
+        textTime.setText(birthday.getHora() == null ? "--:--" : birthday.getHora());
+        textYears.setText(String.valueOf(TimeUnit.MILLISECONDS.toDays((new Date().getTime() - birthday.getFecha().getTime())/365)+1));
     }
 
     public void onClick(View view) {
@@ -119,14 +113,12 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     private void deleteBirthday() {
-        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
         String where = BirthContract.BirthEntry._ID + " = ?";
         String[] whereArgs = { String.valueOf(birthday.getId()) };
         db.delete(BirthContract.BirthEntry.TABLE_NAME, where, whereArgs);
 
         showToast(getResources().getString(R.string.toast_delete));
         finish();
-
     }
 
     private void showToast(String text) {
@@ -136,10 +128,11 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume()
+    protected void onResume()
     {
         super.onResume();
         birthday = obtenerCumpleaños(birthday.getId());
+        setLabel();
         mostrarCumpleaños();
     }
 

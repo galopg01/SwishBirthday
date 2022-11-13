@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,30 +26,113 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    EditText editText;
-    BirthDbHelper dbHelper;
-    List<Birthday> listaCumpleaños;
-    List<String> listaInfo;
+    private Toast toast;
+
+    private ListView listView;
+    private EditText editText;
+    private List<Birthday> listaCumpleaños;
+    private List<String> listaInfo;
+
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        dbHelper = new BirthDbHelper(getApplicationContext(), "SwishBirthday.db");
-
-        listView= findViewById(R.id.listView);
-        editText = findViewById(R.id.editTextName);
-
+        initializeVariables();
         borrarCumpleaños();
         introducirCumpleañosPrueba();
-
         obtenerCumpleaños(null);
+        mostrarCumpleaños();
+        initializeListeners();
+    }
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listaInfo);
+    private void initializeVariables() {
+        toast = null;
+        listView = findViewById(R.id.listView);
+        editText = findViewById(R.id.editTextName);
+
+        BirthDbHelper dbHelper = new BirthDbHelper(this, "SwishBirthday.db");
+        db = dbHelper.getWritableDatabase();
+    }
+
+    private void borrarCumpleaños() {
+        db.delete(BirthContract.BirthEntry.TABLE_NAME, null, null);
+    }
+
+    private void introducirCumpleañosPrueba() {
+        ContentValues values = new ContentValues();
+
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Angelo");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Apr 27, 2001");
+        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
+
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Paula");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
+        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
+
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Random");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
+        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
+
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Galo");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Jan 10, 2001");
+        values.put(BirthContract.BirthEntry.COLUMN_NAME_HORA, "23:55");
+        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
+    }
+
+    @SuppressLint("Range")
+    private void obtenerCumpleaños(String name) {
+        String[] columns = {
+                BirthContract.BirthEntry._ID,
+                BirthContract.BirthEntry.COLUMN_NAME_NOMBRE,
+                BirthContract.BirthEntry.COLUMN_NAME_FECHA,
+                BirthContract.BirthEntry.COLUMN_NAME_HORA
+        };
+
+        String sortOrder = BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " ASC";
+        Cursor cursor;
+        if (name != null) {
+            String where = BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " LIKE ?";
+            String[] whereArgs = { "%" + name + "%" };
+            cursor = db.query(BirthContract.BirthEntry.TABLE_NAME, columns, where, whereArgs, null, null, sortOrder);
+        } else{
+            cursor = db.query(BirthContract.BirthEntry.TABLE_NAME, columns, null, null, null, null, sortOrder);
+        }
+
+        try {
+            listaCumpleaños = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry._ID));
+                String nombre = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
+                String fecha = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
+
+                Date date = null;
+                try {
+                    date = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(fecha);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String hora = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_HORA));
+
+                listaCumpleaños.add(new Birthday(id, nombre, date, hora));
+            }
+        } finally {
+            cursor.close();
+        }
+
+        listaInfo = new ArrayList<>();
+        for (int i = 0; i < listaCumpleaños.size(); i++){
+            listaInfo.add(listaCumpleaños.get(i).toString());
+        }
+    }
+
+    private void mostrarCumpleaños() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaInfo);
         listView.setAdapter(adapter);
+    }
 
+    private void initializeListeners() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -69,111 +153,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void borrarCumpleaños() {
-        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
-
-        db.delete(BirthContract.BirthEntry.TABLE_NAME, null, null);
-    }
-
-    private void introducirCumpleañosPrueba() {
-        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Angelo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Apr 27, 2001");
-        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
-
-        values = new ContentValues();
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Galo");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Jan 10, 2001");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_HORA, "23:55");
-        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
-
-        values = new ContentValues();
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Paula");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
-        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
-
-        values = new ContentValues();
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE, "Random");
-        values.put(BirthContract.BirthEntry.COLUMN_NAME_FECHA, "Dec 13, 2001");
-        db.insert(BirthContract.BirthEntry.TABLE_NAME, null, values);
-
-
-    }
-
-    @SuppressLint("Range") private void obtenerCumpleaños(String name) {
-        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
-
-        listaCumpleaños = new ArrayList<>();
-
-        String[] columns = {
-                BirthContract.BirthEntry._ID,
-                BirthContract.BirthEntry.COLUMN_NAME_NOMBRE,
-                BirthContract.BirthEntry.COLUMN_NAME_FECHA,
-                BirthContract.BirthEntry.COLUMN_NAME_HORA
-        };
-
-        String sortOrder = /*"DATE(" +new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ")-DATE("+ BirthContract.BirthEntry.COLUMN_NAME_FECHA+ ")"*/ BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " ASC";
-        Cursor cursor;
-        if(name != null) {
-            String where = BirthContract.BirthEntry.COLUMN_NAME_NOMBRE + " LIKE ?";
-            String[] whereArgs = { "%" + name + "%" };
-            cursor = db.query(BirthContract.BirthEntry.TABLE_NAME, columns, where, whereArgs, null, null, sortOrder);
-
-        }else{
-            cursor = db.query(BirthContract.BirthEntry.TABLE_NAME, columns, null, null, null, null, sortOrder);
-
-        }
-
-        try {
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(BirthContract.BirthEntry._ID));
-                String nombre = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_NOMBRE));
-                String fecha = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_FECHA));
-
-
-                Date date=null;
-                try {
-                    date = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).parse(fecha);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String hora = cursor.getString(cursor.getColumnIndex(BirthContract.BirthEntry.COLUMN_NAME_HORA));
-
-                listaCumpleaños.add(new Birthday(id,nombre, date, hora));
-            }
-        } finally {
-            cursor.close();
-        }
-
-        listaInfo = new ArrayList<>();
-
-        for(int i=0;i<listaCumpleaños.size();i++){
-            listaInfo.add(listaCumpleaños.get(i).toString());
-        }
-    }
-
     public void onClick(View view) {
-
-        switch ( view . getId ()) {
-            case R.id. button : String name= editText.getText().toString();
-                obtenerCumpleaños(name);
-                System.out.println("Nombre: "+name);
-                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listaInfo);
-                listView.setAdapter(adapter);
-                break ;
+        switch (view.getId()) {
+            case R.id.button: filtrarCumpleaños(); break;
         }
+    }
+
+    private void filtrarCumpleaños() {
+        String name = editText.getText().toString();
+        obtenerCumpleaños(name);
+        mostrarCumpleaños();
+        if (listaInfo.isEmpty()) showToast(getResources().getString(R.string.toast_search));
+    }
+
+    private void showToast(String text) {
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override
-    public void onResume()
+    protected void onResume()
     {
         super.onResume();
         editText.setText("");
         obtenerCumpleaños(null);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listaInfo);
-        listView.setAdapter(adapter);
+        mostrarCumpleaños();
     }
 }
