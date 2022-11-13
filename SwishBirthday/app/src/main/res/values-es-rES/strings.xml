@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SwishBirthday</string>
     <string name="InputName">Introduce un nombre</string>
     <string name="Information">Información</string>
     <string name="textView2">Nombre:</string>

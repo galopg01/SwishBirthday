@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SwishBirthday</string>
+    <string name="app_name" translatable="false">SwishBirthday</string>
     <string name="InputName">Input name</string>
     <string name="Information">Information</string>
     <string name="textView2">Name:</string>

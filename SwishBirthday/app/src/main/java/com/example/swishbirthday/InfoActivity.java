@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +21,10 @@ public class InfoActivity extends AppCompatActivity {
 
     private Toast toast;
 
-    Birthday birthday;
-    BirthDbHelper dbHelper;
+    private Birthday birthday;
+    private BirthDbHelper dbHelper;
+
+    private TextView textName, textDate, textTime, textYears;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +39,24 @@ public class InfoActivity extends AppCompatActivity {
         System.out.println(id);
         birthday = obtenerCumpleaños(id);
 
-        TextView textName = findViewById(R.id.textName);
+        if (Locale.getDefault().getLanguage().equals("es")) {
+            setTitle("Cumpleaños de " + birthday.getNombre());
+        } else {
+            setTitle(birthday.getNombre() + "’s birthday");
+        }
+
+        textName = findViewById(R.id.textName);
+        textDate = findViewById(R.id.textDate);
+        textTime = findViewById(R.id.textTime);
+        textYears = findViewById(R.id.textYears);
+
+        mostrarCumpleaños();
+    }
+
+    private void mostrarCumpleaños() {
         textName.setText(birthday.getNombre());
-
-        TextView textDate = findViewById(R.id.textDate);
         textDate.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(birthday.getFecha()));
-
-        TextView textHour = findViewById(R.id.textHour);
-        textHour.setText(birthday.getHora() == null ? "--:--" : birthday.getHora());
-
-        TextView textYears = findViewById(R.id.textYears);
+        textTime.setText(birthday.getHora() == null ? "--:--" : birthday.getHora());
         textYears.setText(String.valueOf(TimeUnit.MILLISECONDS.toDays((new Date().getTime() - birthday.getFecha().getTime())/365)+1));
     }
 
@@ -129,6 +139,17 @@ public class InfoActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        obtenerCumpleaños(birthday.getId());
+        birthday = obtenerCumpleaños(birthday.getId());
+        mostrarCumpleaños();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
