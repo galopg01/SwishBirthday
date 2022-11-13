@@ -13,8 +13,16 @@
         android:theme="@style/Theme.SwishBirthday"
         tools:targetApi="31">
         <activity
+            android:name=".EditBirthdayActivity"
+            android:label="@string/EditBirthdayActivity"
+            android:parentActivityName=".InfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".InfoActivity" />
+        </activity>
+        <activity
             android:name=".AddBirthdayActivity"
-            android:label ="@string/AddBirthdayActivity"
+            android:label="@string/AddBirthdayActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

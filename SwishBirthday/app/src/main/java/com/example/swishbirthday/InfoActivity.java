@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -90,7 +91,20 @@ public class InfoActivity extends AppCompatActivity {
 
     }
 
-    public void onClickDelete(View v) throws InterruptedException {
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buttonEdit: goToEditActivity(); break;
+            case R.id.buttonDelete: deleteBirthday(); break;
+        }
+    }
+
+    private void goToEditActivity() {
+        Intent intent = new Intent(InfoActivity.this, EditBirthdayActivity.class);
+        intent.putExtra("birthday", birthday.getId());
+        startActivity(intent);
+    }
+
+    private void deleteBirthday() {
         SQLiteDatabase db = this.dbHelper.getWritableDatabase();
         String where = BirthContract.BirthEntry._ID + " = ?";
         String[] whereArgs = { String.valueOf(birthday.getId()) };
@@ -98,5 +112,12 @@ public class InfoActivity extends AppCompatActivity {
 
         finish();
 
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        obtenerCumpleaños(birthday.getId());
     }
 }

@@ -7,14 +7,16 @@
     <string name="textView4">Fecha:</string>
     <string name="textView6">Hora:</string>
     <string name="Turns">Cumple</string>
-    <string name="Edit">EDITAR</string>
-    <string name="Delete">ELIMINAR</string>
+    <string name="buttonEditBirthday">Editar</string>
+    <string name="buttonDeleteBirthday">Eliminar</string>
     <string name="AddBirthdayActivity">Añadir cumpleaños</string>
     <string name="buttonAddBirthday">Añadir</string>
     <string name="empty_name">El campo nombre no puede estar vacío.</string>
     <string name="empty_date">El campo fecha no puede estar vacío.</string>
     <string name="toast_add">¡El cumpleaños se ha añadido con éxito!</string>
-    <string name="editTextAddName">Nombre</string>
-    <string name="editTextAddDate">Fecha de nacimiento</string>
-    <string name="editTextAddTime">Hora</string>
+    <string name="editTextName">Nombre</string>
+    <string name="editTextDate">Fecha de nacimiento</string>
+    <string name="editTextTime">Hora</string>
+    <string name="EditBirthdayActivity">Editar cumpleaños</string>
+    <string name="toast_edit">¡El cumpleaños se ha actualizado con éxito!</string>
 </resources>

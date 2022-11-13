@@ -34,13 +34,19 @@ public class AddBirthdayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_birthday);
+        initializeVariables();
+        initializePickers();
+    }
 
+    private void initializeVariables() {
         toast = null;
         editTextAddName = (EditText) findViewById(R.id.editTextAddName);
         editTextAddDate = (EditText) findViewById(R.id.editTextAddDate);
         editTextAddTime = (EditText) findViewById(R.id.editTextAddTime);
         clearTimeButton = (ImageView) findViewById((R.id.buttonClearTime));
+    }
 
+    private void initializePickers() {
         initDatePicker();
         initTimePicker();
     }
@@ -90,12 +96,12 @@ public class AddBirthdayActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.editTextAddDate: datePickerDialog.show(); break;
             case R.id.editTextAddTime: timePickerDialog.show(); break;
-            case R.id.buttonClearTime: cleanTimeField(); break;
+            case R.id.buttonClearTime: clearTimeField(); break;
             case R.id.buttonAddBirthday: addBirthday(); break;
         }
     }
 
-    private void cleanTimeField() {
+    private void clearTimeField() {
         editTextAddTime.setText("");
         clearTimeButton.setVisibility(View.GONE);
     }

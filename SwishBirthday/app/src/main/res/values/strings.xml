@@ -6,14 +6,16 @@
     <string name="textView4">Date:</string>
     <string name="textView6">Time:</string>
     <string name="Turns">Turns</string>
-    <string name="Edit">EDIT</string>
-    <string name="Delete">DELETE</string>
+    <string name="buttonEditBirthday">Edit</string>
+    <string name="buttonDeleteBirthday">Delete</string>
     <string name="AddBirthdayActivity">Add birthday</string>
     <string name="buttonAddBirthday">Add</string>
     <string name="empty_name">Name field cannot be empty</string>
     <string name="empty_date">Date field cannot be empty</string>
     <string name="toast_add">Birthday added successfully!</string>
-    <string name="editTextAddName">Name</string>
-    <string name="editTextAddDate">Date of birth</string>
-    <string name="editTextAddTime">Time</string>
+    <string name="editTextName">Name</string>
+    <string name="editTextDate">Date of birth</string>
+    <string name="editTextTime">Time</string>
+    <string name="EditBirthdayActivity">Edit birthday</string>
+    <string name="toast_edit">Birthday updated successfully!</string>
 </resources>
